@@ -1,0 +1,65 @@
+Java
+sudo amazon-linux-extras install java-openjdk11 -y
+yum list | grep jdk (Select version)
+sudo yum install java-1.8.0-openjdk-devel.x86_64
+update-alternatives --config java
+find / -name java-11*
+java -version
+
+Jenkins
+wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+sudo yum install jenkins -y
+systemctl enable jenkins.service
+systemctl start jenkins.service
+systemctl status jenkins.service
+
+sonar
+Take one ec2 instance(t2 medium with 20GB storage)
+sudo wget -O /etc/yum.repos.d/sonar.repo  http://downloads.sourceforge.net/project/sonar-pkg/rpm/sonar.repo
+sudo yum install sonar -y
+service sonar start
+
+Maven
+Maven Install(Only in sudo yum install java-1.8.0-openjdk-devel.x86_64 )
+sudo wget http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo -O /etc/yum.repos.d/epel-apache-maven.repo
+sudo sed -i s/\$releasever/6/g /etc/yum.repos.d/epel-apache-maven.repo
+sudo yum install -y apache-maven
+
+Tomcat 
+wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.88/bin/apache-tomcat-9.0.88.tar.gz
+tar -xvzf apache-tomcat
+
+Nexus
+Take one ec2 instance(t2 medium with 20GB storage)
+sudo yum install java-1.8.0-openjdk-devel.x86_64 -y
+cd /opt/
+sudo wget https://download.sonatype.com/nexus/3/latest-unix.tar.gzsudo wget https://download.sonatype.com/nexus/3/latest-unix.tar.gz
+tar -xvf latest-unix.tar.gz
+ls
+mv nexus-3.69.0-02/ nexus3
+ls -l
+chown -R ec2-user:ec2-user nexus3/ sonatype-work/
+ls -l
+ls
+cd nexus3/
+ls
+cd bin/
+ls
+vi nexus.rc 
+pwd
+ln -s /opt/nexus3/bin/nexus /etc/init.d/nexus
+cd /etc/init.d
+ls
+chkconfig --add nexus
+chkconfig nexus on
+sudo service nexus start
+
+Change port number:
+cd nexus3
+cd etc
+vi nexus-default.properties
+modify-application port=2020
+sudo service nexus stop
+sudo service nexus start
+publicip:2020
